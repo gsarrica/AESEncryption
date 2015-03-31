@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTestEncrypt", "UnitTestEncrypt\UnitTestEncrypt.csproj", "{EFBFCC44-25A3-4621-9BCC-3CE2194F2AD5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AESEncryption", "AESEncryption\AESEncryption.csproj", "{F1829175-4A48-4369-A7B0-1270D8FE788A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{EFBFCC44-25A3-4621-9BCC-3CE2194F2AD5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EFBFCC44-25A3-4621-9BCC-3CE2194F2AD5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EFBFCC44-25A3-4621-9BCC-3CE2194F2AD5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EFBFCC44-25A3-4621-9BCC-3CE2194F2AD5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F1829175-4A48-4369-A7B0-1270D8FE788A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F1829175-4A48-4369-A7B0-1270D8FE788A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F1829175-4A48-4369-A7B0-1270D8FE788A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F1829175-4A48-4369-A7B0-1270D8FE788A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
