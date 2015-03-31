@@ -32,52 +32,48 @@ namespace AESEncryption
         ///<summary>
         ///Encrypt string from input using AES
         ///</summary>
-        public string Encrypt(string textToEncrypt)
+        public byte[] createKey()
         {
-            byte[] encryptedBytes = null;
-            byte[] saltBytes = FromHex(this.salt);
-            byte[] bytesToBeEncrypted = System.Text.Encoding.Unicode.GetBytes(textToEncrypt);
-            byte[] passwordBytes = System.Text.Encoding.Unicode.GetBytes(this.password);
-
-            using (MemoryStream ms = new MemoryStream())
-            {
-                //using (RijndaelManaged AES = new RijndaelManaged())
-                using (AesManaged AES = new AesManaged())
-                {
-                    AES.KeySize = 256;
-                    AES.BlockSize = 128;
-
-                    var key = new Rfc2898DeriveBytes(passwordBytes, saltBytes, 1024);
-                    AES.Key = key.GetBytes(AES.KeySize / 8);
-                    AES.IV = key.GetBytes(AES.BlockSize / 8);
-
-                    AES.Mode = CipherMode.CBC;
-
-                    using (CryptoStream cs = new CryptoStream(ms, AES.CreateEncryptor(), CryptoStreamMode.Write))
-                    {
-                        cs.Write(bytesToBeEncrypted, 0, bytesToBeEncrypted.Length);
-                        cs.Close();
-                    }
-
-                    encryptedBytes = ms.ToArray();
-                }
-            }
-
-            return BitConverter.ToString(encryptedBytes).Replace("-", string.Empty).ToLower();
+            int iterations = 1024;
+            Rfc2898DeriveBytes rfc2898 = new System.Security.Cryptography.Rfc2898DeriveBytes(this.password, Encoding.UTF8.GetBytes(this.salt), iterations);
+            byte[] key = rfc2898.GetBytes(32);
+            String keyB64 = Convert.ToBase64String(key);
+            System.Console.WriteLine("Key: " + keyB64);
+            return key;
         }
 
-        ///<summary>
-        ///Convert hex string to byte array
-        ///</summary>
-        private byte[] FromHex(string hex)
+        public AesManaged createCipher(byte[] key, String iv)
         {
-            byte[] raw = new byte[hex.Length / 2];
-            for (int i = 0; i < raw.Length; i++)
+            AesManaged aesCipher = new AesManaged();
+            aesCipher.KeySize = 256;
+            aesCipher.BlockSize = 128;
+            aesCipher.Mode = CipherMode.CBC;
+            aesCipher.Padding = PaddingMode.PKCS7;
+            aesCipher.Key = key;
+            if (iv != null)
             {
-                raw[i] = Convert.ToByte(hex.Substring(i * 2, 2), 16);
+                aesCipher.IV = Convert.FromBase64String(iv);
+                Console.WriteLine("IV:" + iv);
             }
-
-            return raw;
+            return aesCipher;
         }
+
+        public String encrypt(AesManaged aesCipher, String plainText)
+        {
+            byte[] b = System.Text.Encoding.UTF8.GetBytes(plainText);
+            ICryptoTransform encryptTransform = aesCipher.CreateEncryptor();
+            byte[] ctext = encryptTransform.TransformFinalBlock(b, 0, b.Length);
+            System.Console.WriteLine("IV:" + Convert.ToBase64String(aesCipher.IV));
+            return Convert.ToBase64String(ctext);
+        }
+
+        public String decrypt(AesManaged aesCipher, String cipherText)
+        {
+            ICryptoTransform decryptTransform = aesCipher.CreateDecryptor();
+            byte[] encrypted = Convert.FromBase64String(cipherText);
+            byte[] plainText = decryptTransform.TransformFinalBlock(encrypted, 0, encrypted.Length);
+            return Encoding.UTF8.GetString(plainText);
+        }
+       
     }
 }
